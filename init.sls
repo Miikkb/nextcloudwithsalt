@@ -1,6 +1,7 @@
 # Written by Miikka Valtonen 2018
-
-# making sure necessities are installed
+# Please don't use this as is in an important environment.
+# I take no responsibility for anything 
+# Making sure necessities are installed
 
 programs:
   pkg.installed:
@@ -56,7 +57,7 @@ modules:
 
 /etc/apache2/sites-available/nextcloud.conf:
   file.managed:
-    - source: salt://nextcloud/nextcloud.conf
+    - source: salt://nextcloudwithsalt/nextcloud.conf
 
 apache2.service:
   service.running:
