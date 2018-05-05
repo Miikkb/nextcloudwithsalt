@@ -32,21 +32,20 @@ mysql-client: pkg.installed
 
 nextclouddl:
   cmd.run:
-    - name: sudo wget https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -P /tmp
+    - name: sudo wget https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -P /var/www/
 
 # Extracting the files https://docs.saltstack.com/en/latest/ref/states/all/salt.states.archive.html
 
 nextcloudxf:
-  archive.extracted:
-    - name: /tmp/nextcloud/
-    - source: /tmp/nextcloud-13.0.2.tar.bz2
-    - user: www
-    - group: www
-    - archive_format: tar
+  module.run:
+    - name: archive.tar
+    - options: xjf
+    - tarfile: /var/www/nextcloud-13.0.2.tar.bz2 -P
+    - dest: /var/www/
 
 nextcloudcp:
   cmd.run:
-    - name: sudo cp -r /tmp/nextcloud /var/www/
+    - name: sudo cp -r /tmp/var/www/
 
 # Installing various php-related dependencies
 
