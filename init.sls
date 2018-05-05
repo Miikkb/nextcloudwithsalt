@@ -35,13 +35,15 @@ nextclouddl:
   cmd.run:
     - name: sudo wget https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -P /var/www/
     - creates: /var/www/nextcloud-13.0.2.tar.bz2
-    - makedirs: True
 
-# Extracting the files
+# Extracting the files https://docs.saltstack.com/en/latest/ref/states/all/salt.states.archive.html
 
 nextcloudxf:
-  cmd.run:
-    - name: sudo tar -xf /var/www/nextcloud-13.0.2.tar.bz2
+  archive.extracted:
+    - name: /var/www/nextcloud
+    - source: /var/www/nextcloud-13.0.2.tar.bz2
+    - user: www
+    - group: www
 
 # Installing various php-related dependencies
 
@@ -64,10 +66,6 @@ prereqs:
 /etc/apache2/mods-enabled/headers.load:
   file.symlink:
     - target: /etc/apache2/mods-available/headers.load
-
-/etc/apache2/mods-enabled/headers.conf:
-  file.symlink:
-    - target: /etc/apache2/mods-available/headers.conf
 
 /etc/apache2/mods-enabled/env.load:
   file.symlink:
