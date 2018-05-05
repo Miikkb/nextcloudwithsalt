@@ -1,4 +1,5 @@
 # Written by Miikka Valtonen 2018
+# Written with loads of help from various sources, which are credited where proper
 # Please don't use this as is in an important environment
 # I take no responsibility for anything 
 
@@ -16,18 +17,17 @@ programs:
 # NOTE!!!!!!!!!!!!!!!!!!! the password listed here will be the SQL root users password. You want to change this.
 # https://stackoverflow.com/questions/7739645/install-mysql-on-ubuntu-without-a-password-prompt
 
-mysql1:
-  cmd.run:
-    - name: sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password sqlroot'
+debconf-utils: pkg.installed
 
-mysql2:
-  cmd.run:
-    - name: sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password sqlroot
+mysqlroot:
+  debconf.set:
+    - data:
+        'mysql-server/root_password': {'type': 'password', 'value': 'sqlroot'}
+        'mysql-server/root_password_again': {'type': 'password', 'value': 'sqlroot'}
 
-mysql3:
-  cmd.run:
-    - name: sudo apt-get -y install mysql-client mysql-server mysql
+mysql-server: pkg.installed
 
+mysql-client: pkg.installed
 
 # Downloading nextcloud files from their server
 
