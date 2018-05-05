@@ -63,19 +63,26 @@ apache2.service:
   service.running:
     - watch: /etc/apache2/sites-available/nextcloud.conf
 
-# Running a MySQL command that creates the necessary database for nextcloud to work
+# trying sql shit :(
 # NOTE!!!! in this case, we are setting the nextcloud users password as nextcloud
 # CHANGE THE PASSWORD if you use this state in production. 
 # You can do this by changing the word after IDENTIFIED BY 'password';
 
-mysql:
-  mysql_query.run:
-    - order: 2
-    - database: '*'
-    - query: |
-      - CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY 'nextcloud';
-      - CREATE DATABASE IF NOT EXISTS nextcloud;
-      - GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextcloud'@'localhost' IDENTIFIED BY 'nextcloud';
+nextclouddb:
+  mysql_database.present
+
+nextcloud:
+  mysql_user.present:
+    - host: localhost
+    - password: "password"    
+
+nextcloudsqlgrant:
+  mysql_grants.present:
+    - grant: all privileges
+    - database: nextclouddb
+    - user: nextcloud
+    - host: localhost
+    - escape: False
 
 # Making sure www-data has full access to nextcloud directories
 
@@ -90,4 +97,4 @@ ownership:
 
 installation:
   cmd.run:
-    - name: cd /var/www/nextcloud && sudo -u www-data php occ maintenance:install --database "mysql" --database-name "nextcloud" --database-user "root" --database-pass "password" --admin-user "admin" --admin-pass "password"
+    - name: cd /var/www/nextcloud && sudo -u www-data php occ maintenance:install --database "mysql" --database-name "nextclouddb" --database-user "root" --database-pass "password" --admin-user "admin" --admin-pass "password"
