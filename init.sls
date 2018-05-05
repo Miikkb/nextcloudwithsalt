@@ -137,7 +137,7 @@ mysql3:
     - connection_pass: sqlroot
     - connection_host: localhost
     - connection_charset: utf8
-    - query: "GRANT ALL PRIVILEGES ON nextcloud.* to 'nextcloud'@localhost' IDENTIFIED BY 'nextcloud';"
+    - query: "GRANT ALL PRIVILEGES ON nextcloud.* to 'nextcloud'@'localhost' IDENTIFIED BY 'nextcloud';"
 
 
 # Making sure www-data has full access to nextcloud directories
