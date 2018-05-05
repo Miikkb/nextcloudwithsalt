@@ -33,15 +33,15 @@ mysql-client: pkg.installed
 
 nextclouddl:
   cmd.run:
-    - name: sudo wget https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -P /var/www/nextcloud/
-    - creates: /var/www/nextcloud/nextcloud-13.0.2.tar.bz2
+    - name: sudo wget https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -P /var/www/
+    - creates: /var/www/nextcloud-13.0.2.tar.bz2
     - makedirs: True
 
 # Extracting the files
 
 nextcloudxf:
   cmd.run:
-    - name: sudo tar -xf /var/www/nextcloud/nextcloud-13.0.2.tar.bz2
+    - name: sudo tar -xf /var/www/nextcloud-13.0.2.tar.bz2
 
 # Installing various php-related dependencies
 
