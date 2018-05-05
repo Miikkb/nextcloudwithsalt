@@ -44,6 +44,7 @@ nextcloudxf:
     - source: /var/www/nextcloud-13.0.2.tar.bz2
     - user: www
     - group: www
+    - archive_format: tar
 
 # Installing various php-related dependencies
 
