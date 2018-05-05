@@ -11,7 +11,6 @@ programs:
     - pkgs:
       - apache2
       - libapache2-mod-php7.0
-      - curl
 
 # NOTE!!!!!!!!!!!!!!!!!!! the password listed here will be the SQL root users password. You want to change this.
 # Huge thanks to Tero Karvinen http://terokarvinen.com/2018/mysql-automatic-install-with-salt-preseed-database-root-password
@@ -110,18 +109,17 @@ apache2.service:
 # NOTE!!!! in this case, we are setting the nextcloud users password as nextcloud
 # CHANGE THE PASSWORD if you use this state in production. 
 
-nextcloud:
+nextclouddb:
   mysql_database.present:
     - connection_user: root
     - connection_pass: sqlroot
     - connection_host: localhost
     - connection_charset: utf8
 
-nextcloudusr:
+nextcloud:
   mysql_user.present:
-    - name: "nextcloud"
     - host: localhost
-    - password: "nextcloud"
+    - password: nextcloud
     - connection_user: root
     - connection_pass: sqlroot
     - connection_host: localhost
@@ -130,10 +128,10 @@ nextcloudusr:
 nextcloudgrant:
   mysql_grants.present:
     - host: localhost
-    - database: nextcloud.*
+    - database: nextclouddb.*
     - grant: ALL PRIVILEGES
-    - user: "nextcloud"
-    - host: "localhost"
+    - user: nextcloud
+    - host: localhost
     - connection_user: root
     - connection_pass: sqlroot
     - connection_host: localhost
@@ -152,4 +150,4 @@ ownership:
 
 installation:
   cmd.run:
-    - name: cd /var/www/nextcloud/nextcloud/ && sudo -u www-data php occ maintenance:install --database "mysql" --database-name "nextcloud" --database-user "root" --database-pass "sqlroot" --admin-user "admin" --admin-pass "password"
+    - name: cd /var/www/nextcloud/nextcloud/ && sudo -u www-data php occ maintenance:install --database "mysql" --database-name "nextclouddb" --database-user "root" --database-pass "sqlroot" --admin-user "admin" --admin-pass "password"
