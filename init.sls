@@ -14,8 +14,8 @@ programs:
 #!pyobjects
 
 Pkg.installed("mysql-client")
-
-pw="silli" # use pillars in production
+# use pillars in production
+pw="silli"
 
 Pkg.installed("debconf-utils")
 with Debconf.set("mysqlroot", data=
