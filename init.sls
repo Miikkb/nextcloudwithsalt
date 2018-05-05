@@ -1,6 +1,8 @@
 # Written by Miikka Valtonen 2018
-# Please don't use this as is in an important environment.
+# Please don't use this as is in an important environment
 # I take no responsibility for anything 
+
+
 # Making sure necessities are installed
 
 programs:
@@ -10,12 +12,22 @@ programs:
       - libapache2-mod-php7.0
       - curl
 
-# Stupid way to preseed sql root password, but I couldn't get other ways to work.
+# A really stupid way to preseed sql root password, but I couldn't get other ways to work.
 # NOTE!!!!!!!!!!!!!!!!!!! the password listed here will be the SQL root users password. You want to change this.
+# https://stackoverflow.com/questions/7739645/install-mysql-on-ubuntu-without-a-password-prompt
 
-mysql:
+mysql1:
   cmd.run:
-    - name: sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password sqlroot' && sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password sqlroot' && sudo apt-get -y install mysql-server
+    - name: sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password sqlroot'
+
+mysql2:
+  cmd.run:
+    - name: sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password sqlroot
+
+mysql3:
+  cmd.run:
+    - name: sudo apt-get -y install mysql-server
+
 
 # Downloading nextcloud files from their server
 
@@ -52,25 +64,22 @@ prereqs:
 
 # Enabling apache modules
 
-headers:
-  apache_module.enabled:
-    - name:
-      - headers
+/etc/apache2/mods-enabled/headers.load:
+  file.symlink:
+    - source: /etc/apache2/mods-available/headers.load
 
-env:
-  apache_module.enabled:
-    - name:
-      - env
+/etc/apache2/mods-enabled/env.load:
+  file.symlink:
+    - source: /etc/apache2/mods-available/env.load
 
-dir:
-  apache_module.enabled:
-    - name:
-      - dir
+/etc/apache2/mods-enabled/dir.load:
+  file.symlink:
+    - source: /etc/apache2/mods-available/dir.load
 
-mime:
-  apache_module.enabled:
-    - name:
-      - mime
+/etc/apache2/mods-enabled/mime.load:
+  file.symlink:
+    - source: /etc/apache2/mods-available/mime.load
+
 
 # Enabling nextcloud site and placing site .conf files, restarting apache after
 
@@ -88,6 +97,10 @@ apache2.service:
       - file: /etc/apache2/sites-available/nextcloud.conf
 
 # trying sql shit :(
+# https://stackoverflow.com/questions/32362573/salt-stack-mysql-grants-present-underscore-wildcard
+# https://docs.saltstack.com/en/2017.7/ref/states/all/salt.states.mysql_database.html
+# https://docs.saltstack.com/en/latest/ref/states/all/salt.states.mysql_user.html
+
 # NOTE!!!! in this case, we are setting the nextcloud users password as nextcloud
 # CHANGE THE PASSWORD if you use this state in production. 
 
