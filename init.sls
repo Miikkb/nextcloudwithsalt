@@ -37,7 +37,7 @@ nextclouddl:
 # Extracting the files https://docs.saltstack.com/en/latest/ref/states/all/salt.states.archive.html
 
 nextcloudxf:
-  archive.extract:
+  archive.extracted:
     - name: /tmp/nextcloud/
     - source: /tmp/nextcloud-13.0.2.tar.bz2
     - user: www
@@ -119,11 +119,25 @@ mysql1:
     - connection_pass: sqlroot
     - connection_host: localhost
     - connection_charset: utf8
-    - query: |
-      CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY 'nextcloud';
-      CREATE DATABASE IF NOT EXISTS nextcloud;
-      GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextcloud'@'localhost' IDENTIFIED BY 'nextcloud';
+    - query: "CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY 'nextcloud';"
 
+mysql2:
+  mysql_query.run:
+    - database: mysql
+    - connection_user: root
+    - connection_pass: sqlroot
+    - connection_host: localhost
+    - connection_charset: utf8
+    - query: "CREATE DATABASE IF NOT EXISTS nextcloud;"
+
+mysql3:
+  mysql_query.run:
+    - database: mysql
+    - connection_user: root
+    - connection_pass: sqlroot
+    - connection_host: localhost
+    - connection_charset: utf8
+    - query: "GRANT ALL PRIVILEGES ON nextcloud.* to 'nextcloud'@localhost' IDENTIFIED BY 'nextcloud';"
 
 
 # Making sure www-data has full access to nextcloud directories
