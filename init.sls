@@ -31,13 +31,9 @@ mysql-client: pkg.installed
 
 # Downloading nextcloud files from their server
 
-mkdir:
-  cmd.run:
-    - name: sudo mkdir /var/www/nextcloud
-
 nextclouddl:
   cmd.run:
-    - name: sudo curl -L https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -o /var/www/nextcloud/
+    - name: sudo curl -L https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -o /var/www/nextcloud/nextcloud-13.0.2.tar.bz2
     - creates: /var/www/nextcloud/nextcloud-13.0.2.tar.bz2
     - makedirs: True
 
@@ -69,18 +65,33 @@ prereqs:
   file.symlink:
     - target: /etc/apache2/mods-available/headers.load
 
+/etc/apache2/mods-enabled/headers.conf:
+  file.symlink:
+    - target: /etc/apache2/mods-available/headers.conf
+
 /etc/apache2/mods-enabled/env.load:
   file.symlink:
     - target: /etc/apache2/mods-available/env.load
+
+/etc/apache2/mods-enabled/env.conf:
+  file.symlink:
+    - target: /etc/apache2/mods-available/env.conf
 
 /etc/apache2/mods-enabled/dir.load:
   file.symlink:
     - target: /etc/apache2/mods-available/dir.load
 
+/etc/apache2/mods-enabled/dir.conf:
+  file.symlink:
+    - target: /etc/apache2/mods-available/dir.conf
+
 /etc/apache2/mods-enabled/mime.load:
   file.symlink:
     - target: /etc/apache2/mods-available/mime.load
 
+/etc/apache2/mods-enabled/mime.conf:
+  file.symlink:
+    - target: /etc/apache2/mods-available/mime.conf
 
 # Enabling nextcloud site and placing site .conf files, restarting apache after
 
