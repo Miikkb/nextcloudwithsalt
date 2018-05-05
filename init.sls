@@ -133,7 +133,7 @@ nextcloudgrant:
     - database: nextcloud.*
     - grant: ALL PRIVILEGES
     - user: "nextcloud"
-    - host "localhost"
+    - host: "localhost"
     - connection_user: root
     - connection_pass: sqlroot
     - connection_host: localhost
