@@ -61,7 +61,8 @@ modules:
 
 apache2.service:
   service.running:
-    - watch: /etc/apache2/sites-available/nextcloud.conf
+    - watch:
+      -file: /etc/apache2/sites-available/nextcloud.conf
 
 # trying sql shit :(
 # NOTE!!!! in this case, we are setting the nextcloud users password as nextcloud
