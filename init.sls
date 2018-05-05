@@ -13,9 +13,9 @@ programs:
       - libapache2-mod-php7.0
       - curl
 
-# A really stupid way to preseed sql root password, but I couldn't get other ways to work.
 # NOTE!!!!!!!!!!!!!!!!!!! the password listed here will be the SQL root users password. You want to change this.
-# https://stackoverflow.com/questions/7739645/install-mysql-on-ubuntu-without-a-password-prompt
+# Huge thanks to Tero Karvinen http://terokarvinen.com/2018/mysql-automatic-install-with-salt-preseed-database-root-password
+# I had a lot of problems with preseeding, but this one seems to have done it.
 
 debconf-utils: pkg.installed
 
@@ -37,14 +37,15 @@ mkdir:
 
 nextclouddl:
   cmd.run:
-    - name: curl -L https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -o /var/www/nextcloud/
+    - name: sudo curl -L https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -o /var/www/nextcloud/
     - creates: /var/www/nextcloud/nextcloud-13.0.2.tar.bz2
+    - makedirs: True
 
 # Extracting the files
 
 nextcloudxf:
   cmd.run:
-    - name: tar -xf /var/www/nextcloud/nextcloud-13.0.2.tar.bz2
+    - name: sudo tar -xf /var/www/nextcloud/nextcloud-13.0.2.tar.bz2
 
 # Installing various php-related dependencies
 
@@ -66,19 +67,19 @@ prereqs:
 
 /etc/apache2/mods-enabled/headers.load:
   file.symlink:
-    - source: /etc/apache2/mods-available/headers.load
+    - target: /etc/apache2/mods-available/headers.load
 
 /etc/apache2/mods-enabled/env.load:
   file.symlink:
-    - source: /etc/apache2/mods-available/env.load
+    - target: /etc/apache2/mods-available/env.load
 
 /etc/apache2/mods-enabled/dir.load:
   file.symlink:
-    - source: /etc/apache2/mods-available/dir.load
+    - target: /etc/apache2/mods-available/dir.load
 
 /etc/apache2/mods-enabled/mime.load:
   file.symlink:
-    - source: /etc/apache2/mods-available/mime.load
+    - target: /etc/apache2/mods-available/mime.load
 
 
 # Enabling nextcloud site and placing site .conf files, restarting apache after
@@ -110,7 +111,7 @@ nextclouddb:
 nextcloud:
   mysql_user.present:
     - host: localhost
-    - password: "password"    
+    - password: "nextcloud"    
 
 nextcloudsqlgrant:
   mysql_grants.present:
