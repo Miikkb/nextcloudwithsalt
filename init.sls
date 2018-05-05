@@ -32,18 +32,21 @@ mysql-client: pkg.installed
 
 nextclouddl:
   cmd.run:
-    - name: sudo wget https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -P /var/www/
-    - creates: /var/www/nextcloud-13.0.2.tar.bz2
+    - name: sudo wget https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -P /tmp
 
 # Extracting the files https://docs.saltstack.com/en/latest/ref/states/all/salt.states.archive.html
 
 nextcloudxf:
   archive.extract:
-    - name: /var/www/
-    - source: /var/www/nextcloud-13.0.2.tar.bz2
+    - name: /tmp/nextcloud/
+    - source: /tmp/nextcloud-13.0.2.tar.bz2
     - user: www
     - group: www
     - archive_format: tar
+
+nextcloudcp:
+  cmd.run:
+    - name: sudo cp -r /tmp/nextcloud /var/www/
 
 # Installing various php-related dependencies
 
@@ -109,31 +112,19 @@ apache2.service:
 # NOTE!!!! in this case, we are setting the nextcloud users password as nextcloud
 # CHANGE THE PASSWORD if you use this state in production. 
 
-nextclouddb:
-  mysql_database.present:
+mysql1:
+  mysql_query.run:
+    - database: mysql
     - connection_user: root
     - connection_pass: sqlroot
     - connection_host: localhost
     - connection_charset: utf8
+    - query: |
+      CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY 'nextcloud';
+      CREATE DATABASE IF NOT EXISTS nextcloud;
+      GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextcloud'@'localhost' IDENTIFIED BY 'nextcloud';
 
-nextcloud:
-  mysql_user.present:
-    - host: localhost
-    - connection_user: root
-    - connection_pass: sqlroot
-    - connection_charset: utf8
 
-nextcloudgrant:
-  mysql_grants.present:
-    - host: localhost
-    - database: nextclouddb.*
-    - grant: ALL PRIVILEGES
-    - user: nextcloud
-    - host: localhost
-    - connection_user: root
-    - connection_pass: sqlroot
-    - connection_host: localhost
-    - connection_charset: utf8
 
 # Making sure www-data has full access to nextcloud directories
 
