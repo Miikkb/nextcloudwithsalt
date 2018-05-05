@@ -61,7 +61,7 @@ modules:
 
 apache2.service:
   service.running:
-    - watch: file: /etc/apache2/sites-available/nextcloud.conf
+    - watch: /etc/apache2/sites-available/nextcloud.conf
 
 # Running a MySQL command that creates the necessary database for nextcloud to work
 # NOTE!!!! in this case, we are setting the nextcloud users password as nextcloud
