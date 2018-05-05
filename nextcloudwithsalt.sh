@@ -1,3 +1,3 @@
 #!bin/bash/
 
-sudo salt '*' state.apply nextcloud
+sudo salt '*' state.apply nextcloudwithsalt
