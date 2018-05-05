@@ -51,13 +51,13 @@ modules:
 
 # Enabling nextcloud site and placing site .conf files, restarting apache after
 
-/etc/apache2/sites-enabled/nextcloud.conf:
-  file.symlink:
-    - target: /etc/apache2/sites-available/nextcloud.conf
-
 /etc/apache2/sites-available/nextcloud.conf:
   file.managed:
     - source: salt://nextcloudwithsalt/nextcloud.conf
+
+/etc/apache2/sites-enabled/nextcloud.conf:
+  file.symlink:
+    - target: /etc/apache2/sites-available/nextcloud.conf
 
 apache2.service:
   service.running:
