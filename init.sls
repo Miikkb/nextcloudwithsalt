@@ -10,20 +10,12 @@ programs:
       - libapache2-mod-php7.0
       - curl
 
-# Credit to Tero Karvinen http://terokarvinen.com & Joona Leppalahti https://github.com/joonaleppalahti/CCM/blob/master/salt/srv/salt/mysql.sls
-#!pyobjects
+# Stupid way to preseed sql root password, but I couldn't get other ways to work.
+# NOTE!!!!!!!!!!!!!!!!!!! the password listed here will be the SQL root users password. You want to change this.
 
-Pkg.installed("mysql-client")
-# use pillars in production
-pw="silli"
-
-Pkg.installed("debconf-utils")
-with Debconf.set("mysqlroot", data=
- {
- 'mysql-server/root_password':{'type':'password', 'value':pw},
- 'mysql-server/root_password_again': {'type':'password', 'value': pw}
- }):
- Pkg.installed("mysql-server")
+mysql:
+  cmd.run:
+    - name: sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password sqlroot' && sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password sqlroot' && sudo apt-get -y install mysql-server
 
 # Downloading nextcloud files from their server
 
@@ -98,7 +90,6 @@ apache2.service:
 # trying sql shit :(
 # NOTE!!!! in this case, we are setting the nextcloud users password as nextcloud
 # CHANGE THE PASSWORD if you use this state in production. 
-# You can do this by changing the word after IDENTIFIED BY 'password';
 
 nextclouddb:
   mysql_database.present
@@ -124,9 +115,9 @@ ownership:
 
 # Performing the actual installation.
 # PLEASE NOTE!!!!!!!!!!! You will have to again edit the passwords 
-# --database-pass should be the SAME PASSWORD you wrote for the root user when you installed MySQL, in this case it's silli
+# --database-pass should be the SAME PASSWORD you wrote for the root user when you installed MySQL
 # --admin-pass should be admin password that you will want to log into nextcloud with
 
 installation:
   cmd.run:
-    - name: cd /var/www/nextcloud && sudo -u www-data php occ maintenance:install --database "mysql" --database-name "nextclouddb" --database-user "root" --database-pass "silli" --admin-user "admin" --admin-pass "password"
+    - name: cd /var/www/nextcloud && sudo -u www-data php occ maintenance:install --database "mysql" --database-name "nextclouddb" --database-user "root" --database-pass "sqlroot" --admin-user "admin" --admin-pass "password"
