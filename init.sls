@@ -1,5 +1,7 @@
 # Written by Miikka Valtonen 2018
 
+# making sure necessities are installed
+
 programs:
   pkg.installed:
     - pkgs:
@@ -74,3 +76,17 @@ mysql:
       - CREATE DATABASE IF NOT EXISTS nextcloud;
       - GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextcloud'@'localhost' IDENTIFIED BY 'nextcloud';
 
+# Making sure www-data has full access to nextcloud directories
+
+ownership:
+  cmd.run:
+    - name: sudo chown -R www-data:www-data /var/www/nextcloud
+
+# Performing the actual installation.
+# PLEASE NOTE!!!!!!!!!!! You will have to again edit the passwords 
+# --database-pass should be the SAME PASSWORD you wrote for the root user when you installed MySQL.
+# --admin-pass should be admin password that you will want to log into nextcloud with
+
+installation:
+  cmd.run:
+    - name: cd /var/www/nextcloud && sudo -u www-data php occ maintenance:install --database "mysql" --database-name "nextcloud" --database-user "root" --database-pass "password" --admin-user "admin" --admin-pass "password"
