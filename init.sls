@@ -109,14 +109,14 @@ apache2.service:
 # NOTE!!!! in this case, we are setting the nextcloud users password as nextcloud
 # CHANGE THE PASSWORD if you use this state in production. 
 
-nextclouddb:
-  mysql_database.present
+nextcloud:
+  mysql_database.present:
     - connection_user: root
     - connection_pass: sqlroot
     - connection_host: localhost
     - connection_charset: utf8
 
-nextcloud:
+nextclouduser:
   mysql_user.present:
     - host: localhost
     - password: "nextcloud"    
@@ -128,7 +128,7 @@ nextcloud:
 nextcloudsqlgrant:
   mysql_grants.present:
     - grant: all privileges
-    - database: nextclouddb
+    - database: nextcloud
     - user: nextcloud
     - host: localhost
     - connection_user: root
@@ -151,4 +151,4 @@ ownership:
 
 installation:
   cmd.run:
-    - name: cd /var/www/nextcloud && sudo -u www-data php occ maintenance:install --database "mysql" --database-name "nextclouddb" --database-user "root" --database-pass "sqlroot" --admin-user "admin" --admin-pass "password"
+    - name: cd /var/www/nextcloud && sudo -u www-data php occ maintenance:install --database "mysql" --database-name "nextcloud" --database-user "root" --database-pass "sqlroot" --admin-user "admin" --admin-pass "password"
