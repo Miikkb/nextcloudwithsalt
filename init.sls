@@ -26,7 +26,7 @@ mysql2:
 
 mysql3:
   cmd.run:
-    - name: sudo apt-get -y install mysql-server
+    - name: sudo apt-get -y install mysql-client mysql-server mysql
 
 
 # Downloading nextcloud files from their server
