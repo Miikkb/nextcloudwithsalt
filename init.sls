@@ -41,11 +41,15 @@ nextcloudxf:
     - name: archive.tar
     - options: xjf
     - tarfile: /var/www/nextcloud-13.0.2.tar.bz2 -P
-    - dest: /var/www/
+    - dest: /tmp
+
+nextcloudmk:
+  cmd.run:
+    - name: sudo mkdir /var/www/nextcloud
 
 nextcloudcp:
   cmd.run:
-    - name: sudo cp -r /tmp/var/www/
+    - name: sudo cp -r /tmp/nextcloud/* /var/www/nextcloud/
 
 # Installing various php-related dependencies
 
