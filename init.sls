@@ -106,6 +106,7 @@ apache2.service:
 # https://stackoverflow.com/questions/32362573/salt-stack-mysql-grants-present-underscore-wildcard
 # https://docs.saltstack.com/en/2017.7/ref/states/all/salt.states.mysql_database.html
 # https://docs.saltstack.com/en/latest/ref/states/all/salt.states.mysql_user.html
+# https://github.com/saltstack-formulas/mysql-formula
 # NOTE!!!! in this case, we are setting the nextcloud users password as nextcloud
 # CHANGE THE PASSWORD if you use this state in production. 
 
@@ -116,27 +117,23 @@ nextcloud:
     - connection_host: localhost
     - connection_charset: utf8
 
-nextclouduser:
+nextcloudusr:
   mysql_user.present:
+    - name: nextcloud
     - host: localhost
-    - password: nextcloud    
+    - password: nextcloud
     - connection_user: root
     - connection_pass: sqlroot
     - connection_host: localhost
     - connection_charset: utf8
 
-nextcloudsqlgrant:
+nextcloudgrant:
   mysql_grants.present:
-    - grant: all privileges
-    - database: nextcloud.*
-    - user: nextcloud
     - host: localhost
-    - connection_user: root
-    - connection_pass: sqlroot
-    - connection_host: localhost
-    - connection_charset: utf8
-
-
+    - database: nextcloud.*
+    - grant: ALL PRIVILEGES
+    - user: nextcloud
+    - host localhost
 
 # Making sure www-data has full access to nextcloud directories
 
