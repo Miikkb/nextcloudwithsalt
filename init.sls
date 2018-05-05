@@ -7,10 +7,29 @@ programs:
   pkg.installed:
     - pkgs:
       - apache2
-      - mysql-server
       - libapache2-mod-php7.0
+      - curl
+
+# Credit to Tero Karvinen http://terokarvinen.com & Joona Leppalahti https://github.com/joonaleppalahti/CCM/blob/master/salt/srv/salt/mysql.sls
+#!pyobjects
+
+Pkg.installed("mysql-client")
+
+pw="silli" # use pillars in production
+
+Pkg.installed("debconf-utils")
+with Debconf.set("mysqlroot", data=
+ {
+ 'mysql-server/root_password':{'type':'password', 'value':pw},
+ 'mysql-server/root_password_again': {'type':'password', 'value': pw}
+ }):
+ Pkg.installed("mysql-server")
 
 # Downloading nextcloud files from their server
+
+mkdir:
+  cmd.run:
+    - name: sudo mkdir /var/www/nextcloud
 
 nextclouddl:
   cmd.run:
@@ -41,12 +60,24 @@ prereqs:
 
 # Enabling apache modules
 
-modules:
+headers:
   apache_module.enabled:
     - name:
       - headers
+
+env:
+  apache_module.enabled:
+    - name:
       - env
+
+dir:
+  apache_module.enabled:
+    - name:
       - dir
+
+mime:
+  apache_module.enabled:
+    - name:
       - mime
 
 # Enabling nextcloud site and placing site .conf files, restarting apache after
@@ -93,9 +124,9 @@ ownership:
 
 # Performing the actual installation.
 # PLEASE NOTE!!!!!!!!!!! You will have to again edit the passwords 
-# --database-pass should be the SAME PASSWORD you wrote for the root user when you installed MySQL.
+# --database-pass should be the SAME PASSWORD you wrote for the root user when you installed MySQL, in this case it's silli
 # --admin-pass should be admin password that you will want to log into nextcloud with
 
 installation:
   cmd.run:
-    - name: cd /var/www/nextcloud && sudo -u www-data php occ maintenance:install --database "mysql" --database-name "nextclouddb" --database-user "root" --database-pass "password" --admin-user "admin" --admin-pass "password"
+    - name: cd /var/www/nextcloud && sudo -u www-data php occ maintenance:install --database "mysql" --database-name "nextclouddb" --database-user "root" --database-pass "silli" --admin-user "admin" --admin-pass "password"
