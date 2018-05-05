@@ -33,7 +33,7 @@ mysql-client: pkg.installed
 
 nextclouddl:
   cmd.run:
-    - name: sudo curl -L https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -o /var/www/nextcloud/nextcloud-13.0.2.tar.bz2
+    - name: sudo wget https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -P /var/www/nextcloud/
     - creates: /var/www/nextcloud/nextcloud-13.0.2.tar.bz2
     - makedirs: True
 
@@ -72,10 +72,6 @@ prereqs:
 /etc/apache2/mods-enabled/env.load:
   file.symlink:
     - target: /etc/apache2/mods-available/env.load
-
-/etc/apache2/mods-enabled/env.conf:
-  file.symlink:
-    - target: /etc/apache2/mods-available/env.conf
 
 /etc/apache2/mods-enabled/dir.load:
   file.symlink:
