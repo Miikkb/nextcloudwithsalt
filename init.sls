@@ -32,15 +32,15 @@ mysql-client: pkg.installed
 
 nextclouddl:
   cmd.run:
-    - name: sudo wget https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -P /var/www/
-    - creates: /var/www/nextcloud-13.0.2.tar.bz2
+    - name: sudo wget https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -P /var/
+    - creates: /var/nextcloud-13.0.2.tar.bz2
 
 # Extracting the files https://docs.saltstack.com/en/latest/ref/states/all/salt.states.archive.html
 
 nextcloudxf:
   archive.extracted:
-    - name: /var/www/nextcloud/
-    - source: /var/www/nextcloud-13.0.2.tar.bz2
+    - name: /var/www/
+    - source: /var/nextcloud-13.0.2.tar.bz2
     - user: www
     - group: www
     - archive_format: tar
@@ -122,7 +122,6 @@ nextcloud:
     - password: nextcloud
     - connection_user: root
     - connection_pass: sqlroot
-    - connection_host: localhost
     - connection_charset: utf8
 
 nextcloudgrant:
