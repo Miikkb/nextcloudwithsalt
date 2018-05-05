@@ -119,7 +119,6 @@ nextclouddb:
 nextcloud:
   mysql_user.present:
     - host: localhost
-    - password: nextcloud
     - connection_user: root
     - connection_pass: sqlroot
     - connection_charset: utf8
