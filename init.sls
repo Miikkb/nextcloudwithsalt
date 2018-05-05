@@ -40,7 +40,7 @@ nextclouddl:
 
 nextcloudxf:
   archive.extracted:
-    - name: /var/www/
+    - name: /var/www/nextcloud/
     - source: /var/www/nextcloud-13.0.2.tar.bz2
     - user: www
     - group: www
@@ -119,9 +119,9 @@ nextcloud:
 
 nextcloudusr:
   mysql_user.present:
-    - name: nextcloud
+    - name: "nextcloud"
     - host: localhost
-    - password: nextcloud
+    - password: "nextcloud"
     - connection_user: root
     - connection_pass: sqlroot
     - connection_host: localhost
@@ -132,8 +132,12 @@ nextcloudgrant:
     - host: localhost
     - database: nextcloud.*
     - grant: ALL PRIVILEGES
-    - user: nextcloud
-    - host localhost
+    - user: "nextcloud"
+    - host "localhost"
+    - connection_user: root
+    - connection_pass: sqlroot
+    - connection_host: localhost
+    - connection_charset: utf8
 
 # Making sure www-data has full access to nextcloud directories
 
@@ -148,4 +152,4 @@ ownership:
 
 installation:
   cmd.run:
-    - name: cd /var/www/nextcloud/ && sudo -u www-data php occ maintenance:install --database "mysql" --database-name "nextcloud" --database-user "root" --database-pass "sqlroot" --admin-user "admin" --admin-pass "password"
+    - name: cd /var/www/nextcloud/nextcloud/ && sudo -u www-data php occ maintenance:install --database "mysql" --database-name "nextcloud" --database-user "root" --database-pass "sqlroot" --admin-user "admin" --admin-pass "password"
