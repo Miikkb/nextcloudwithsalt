@@ -37,19 +37,8 @@ nextclouddl:
 # Extracting the files https://docs.saltstack.com/en/latest/ref/states/all/salt.states.archive.html
 
 nextcloudxf:
-  module.run:
-    - name: archive.tar
-    - options: xjf
-    - tarfile: /var/www/nextcloud-13.0.2.tar.bz2 -P
-    - dest: /tmp
-
-nextcloudmk:
   cmd.run:
-    - name: sudo mkdir /var/www/nextcloud
-
-nextcloudcp:
-  cmd.run:
-    - name: sudo cp -r /tmp/nextcloud/* /var/www/nextcloud/
+    - name: sudo tar -xf /var/www/nextcloud-13.0.2.tar.bz2
 
 # Installing various php-related dependencies
 
