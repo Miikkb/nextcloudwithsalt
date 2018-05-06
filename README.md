@@ -28,3 +28,5 @@ Some things that I should improve on/fix, that a proper release would have:
 ### $ sudo sh /srv/salt/nextcloudwithsalt/nextcloudwithsalt.sh
 
 ### And you should be all set.
+
+### If things don't work and you don't see anything at address/nextcloud, see if your port forwarding is ok.
