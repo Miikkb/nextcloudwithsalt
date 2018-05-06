@@ -32,3 +32,11 @@ Some things that I should improve on/fix, that a proper release would have:
 ### And you should be all set.
 
 ### If things don't work and you don't see anything at address/nextcloud, see if your port forwarding is ok.
+
+### Also, you may need to add your IP address to the trusted domains list in nextcloud's config.php file, /var/www/nextcloud/config/config.php:
+
+### 'trusted_domains' =>
+### array (
+###  0 => 'youraddressordomain',
+###  1 => 'anotheraddress',
+### ),
