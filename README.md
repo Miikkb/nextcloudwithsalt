@@ -1,6 +1,8 @@
 # Hello! This is my Salt state for installing NextCloud.
 
-## My objective was to automate the installation of a cloud storage server. This turned out to be a bit more difficult than I anticipated, but in the end I somehow managed to make it work.
+## My objective was to automate the installation of a cloud storage server. This turned out to be a lot more difficult than I anticipated, but in the end I somehow managed to make it work.
+
+## If you can't stand looking at workarounds for workarounds you might want to look away.
 
 I do NOT encourage you to use this anywhere where you care about things.
 
