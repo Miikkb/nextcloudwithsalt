@@ -48,7 +48,7 @@ nextcloudcp:
 
 nextcloudrm:
   cmd.run:
-    - name: sudo rm /var/www/nextcloud/nextcloud
+    - name: sudo rm -r /var/www/nextcloud/nextcloud
 
 # Installing various php-related dependencies
 
@@ -139,7 +139,7 @@ mysql3:
     - connection_pass: sqlroot
     - connection_host: localhost
     - connection_charset: utf8
-    - query: "GRANT ALL PRIVILEGES ON nextcloud.* to 'nextcloud'@'localhost' IDENTIFIED BY 'nextcloud';"
+    - query: "GRANT ALL PRIVILEGES ON nextcloud.* to 'nextcloud'@'localhost';"
 
 
 # Making sure www-data has full access to nextcloud directories
