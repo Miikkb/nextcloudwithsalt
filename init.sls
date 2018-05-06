@@ -34,11 +34,21 @@ nextclouddl:
   cmd.run:
     - name: sudo wget https://download.nextcloud.com/server/releases/nextcloud-13.0.2.tar.bz2 -P /var/www/
 
-# Extracting the files https://docs.saltstack.com/en/latest/ref/states/all/salt.states.archive.html
+# Starting the extraction to the proper folder, which turned out to be a mess.
 
 nextcloudxf:
+  archive.extracted:
+    - name: /var/www/nextcloud/
+    - source: /var/www/nextcloud-13.0.2.tar.bz2
+    - archive_format: tar
+
+nextcloudcp:
   cmd.run:
-    - name: sudo tar -xf /var/www/nextcloud-13.0.2.tar.bz2
+    - name: sudo mv /var/www/nextcloud/nextcloud/* /var/www/nextcloud/
+
+nextcloudrm:
+  cmd.run:
+    - name: sudo rm /var/www/nextcloud/nextcloud
 
 # Installing various php-related dependencies
 
