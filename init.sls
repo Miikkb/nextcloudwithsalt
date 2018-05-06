@@ -155,4 +155,4 @@ ownership:
 
 installation:
   cmd.run:
-    - name: cd /var/www/nextcloud/nextcloud/ && sudo -u www-data php occ maintenance:install --database "mysql" --database-name "nextclouddb" --database-user "root" --database-pass "sqlroot" --admin-user "admin" --admin-pass "password"
+    - name: cd /var/www/nextcloud/ && sudo -u www-data php occ maintenance:install --database "mysql" --database-name "nextclouddb" --database-user "root" --database-pass "sqlroot" --admin-user "admin" --admin-pass "password"
